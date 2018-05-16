@@ -242,7 +242,7 @@
 				
 				<?php if (isset($gravapress_email) && $gravapress_email != '') : ?>
 
-					<!-- Sidebar Postbox -->
+					<!-- Sidebar Postboxx -->
 					<div class="postbox">
 
 						<div class="handlediv" title="Click to toggle"><br></div>

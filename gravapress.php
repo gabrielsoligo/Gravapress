@@ -34,7 +34,7 @@
     add_action( 'admin_menu', 'gravapress_menu' );   
 
     /*
-    *   Página de configuração
+    *   Página de configuração teste
     */
     function gravapress_options_page(){
         // Test to see if the user can manage the plugin
