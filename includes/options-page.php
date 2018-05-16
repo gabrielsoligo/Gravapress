@@ -62,7 +62,7 @@
 
 						<div class="inside">
 
-							<p>Preview of your Gravatar Profile</p>
+							
 
 							<div class="wrap">
 								
@@ -74,43 +74,43 @@
 										<div class="col-wrap">
 											
 											<div class="inside">
-
-												<a href="#"><img class="main-image" src="<?php echo $plugin_url . '/images/no-image.png'; ?>" width="300px" height="300px"></a>
-
+													
+												<!-- Imagem destaque -->
+												<a href="<?php echo $gravapress_profile->{'entry'}[0]->{'thumbnailUrl'} . '?s=370';?>" target="_blank">
+													<img class="main-image" src="<?php echo $gravapress_profile->{'entry'}[0]->{'thumbnailUrl'} . '?s=370';?>" alt="Imagem de Perfil">
+												</a>
+												
+												<!-- Galeria de Imagens -->
 												<h1><?php esc_attr_e( 'Photo Gallery', 'wp_admin_style' ); ?></h1>
 												<div class="gallery-image">
-													<a href="#" target="_blank">
-														<img src="<?php echo $plugin_url . '/images/no-image.png'; ?>" width="50px" height="50px">
-													</a>
 
-													<a href="#" target="_blank">
-														<img src="<?php echo $plugin_url . '/images/no-image.png'; ?>" width="50px" height="50px">
-													</a>
+														<?php
+                                                            $total_photos = sizeof( $gravapress_profile->{'entry'}[0]->{'photos'} );                                                            
+                                                            for( $i = 0; $i < $total_photos; $i++ ) : 
+                                                        ?>
+                                                        
+                                                        <a href="<?php echo $gravapress_profile->{'entry'}[0]->{'photos'}[$i]->{'value'}; ?>" target="_blank">
+                                                            <img class="gallery-gravatar-image" src="<?php echo $gravapress_profile->{'entry'}[0]->{'photos'}[$i]->{'value'}; ?>" alt="Gravatar User Image Profile">                                                        
+                                                        </a>
 
-													<a href="#" target="_blank">
-														<img src="<?php echo $plugin_url . '/images/no-image.png'; ?>" width="50px" height="50px">
-													</a>
+                                                        <?php endfor; ?>
 
-													<a href="#" target="_blank">
-														<img src="<?php echo $plugin_url . '/images/no-image.png'; ?>" width="50px" height="50px">
-													</a>
-
-													<a href="#" target="_blank">
-														<img src="<?php echo $plugin_url . '/images/no-image.png'; ?>" width="50px" height="50px">
-													</a>
 												</div>
 
+												<!-- WebSites -->
 												<h1><?php esc_attr_e( 'Websites', 'wp_admin_style' ); ?></h1>
 												<div class="sites-image">
-													<a href="#" target="_blank">
-														<img src="<?php echo $plugin_url . '/images/no-image.png'; ?>" width="100px" height="100px"> 
-														<div class="caption">View Site</div>
-													</a>
-
-													<a href="#" target="_blank">
-														<img src="<?php echo $plugin_url . '/images/no-image.png'; ?>" width="100px" height="100px"> 
-														<div class="caption">View Site</div>
-													</a>
+													<?php
+                                                        $total_urls = sizeof( $gravapress_profile->{'entry'}[0]->{'urls'} );                                                            
+                                                        for( $i = 0; $i < $total_urls; $i++ ) : 
+													?>                                                        
+                                                        
+                                                    <a href="<?php echo $gravapress_profile->{'entry'}[0]->{'urls'}[$i]->{'value'}; ?>" target="_blank">
+                                                        <img src="<?php echo $plugin_url . '/images/link.png'; ?>" width="100px" height="100px" >                                                                                                                
+                                                        <div class="caption"><?php echo $gravapress_profile->{'entry'}[0]->{'urls'}[$i]->{'title'}; ?></div>
+                                                    </a>
+                                                    
+                                                    <?php endfor; ?> 
 												</div>
 												
 											</div>
@@ -127,13 +127,13 @@
 										<!-- Info -->
 										<div class="col-wrap">
 
-											<h1><?php esc_attr_e( 'Info', 'wp_admin_style' ); ?></h1>
+											<h1><?php esc_attr_e( 'Informações do Usuário', 'wp_admin_style' ); ?></h1>
 											
 											<div class="inside">
 
-												<h1><?php esc_attr_e( 'Marco Floriano', 'wp_admin_style' ); ?></h1>
-												<?php esc_attr_e( 'São Paulo, Brasil', 'wp_admin_style' ); ?>
-												<p>Empreendedor, desenvolvedor web e instrutor de CMS. Utilizo WordPress para dar vida às minhas ideias.</p>
+												<h1><?php esc_attr_e( $gravapress_profile->{'entry'}[0]->{'name'}->{'formatted'}, 'wp_admin_style' ); ?></h1>
+												<?php esc_attr_e( $gravapress_profile->{'entry'}[0]->{'currentLocation'}, 'wp_admin_style' ); ?>
+												<p><?php echo $gravapress_profile->{'entry'}[0]->{'aboutMe'};?></p>
 											
 											</div>
 										
@@ -147,33 +147,22 @@
 											
 											<div class="inside">
 
-												<p>
-													Facebook<br />
-													<small><a href="#">View Profile</a></small>
-												</p>
+												<?php $total_accounts = sizeof( $gravapress_profile->{'entry'}[0]->{'accounts'});
 
-												<hr />
+													for( $i = 0; $i < $total_accounts; $i++) :
+												?>
+	                                            	<h2>                                                    
+	                                                    <?php esc_attr_e( ucfirst($gravapress_profile->{'entry'}[0]->{'accounts'}[$i]->{'shortname'}), 'wp_admin_style' ); ?>                                                    
+	                                                    <br />                                                    
+	                                                    <small>
+	                                                        <a href="<?php echo $gravapress_profile->{'entry'}[0]->{'accounts'}[$i]->{'url'} ; ?>" target="_blank">
+	                                                            Ver Perfil
+	                                                        </a>
+	                                                    </small>
+	                                                </h2> 
 
-												<p>
-													Google<br />
-													<small><a href="#">View Profile</a></small>
-												</p>
-
-												<hr />
-
-												<p>
-													Linkedin<br />
-													<small><a href="#">View Profile</a></small>
-												</p>
-
-												<hr />
-
-												<p>
-													Twiiter<br />
-													<small><a href="#">View Profile</a></small>
-												</p>
-
-												<hr />
+	                                                <hr />
+												<?php endfor; ?>
 											
 											</div>
 										
@@ -183,30 +172,61 @@
 										<!-- Contact -->
 										<div class="col-wrap">
 
-											<h1><?php esc_attr_e( 'Contact', 'wp_admin_style' ); ?></h1>
+											<h1><?php esc_attr_e( 'Contato', 'wp_admin_style' ); ?></h1>
 											
 											<div class="inside">
 
-												<p>
-													Email<br />
-													<small>marcofloriano@gmail.com</small>
-												</p>
+												<!-- Site -->
 
-												<hr />	
+                                                <?php if( $gravapress_profile->{'entry'}[0]->{'urls'}) :
 
-												<p>
-													Skype<br />
-													<small>marco_floriano</small>
-												</p>
+                                                    $total_ims = sizeof($gravapress_profile->{'entry'}[0]->{'urls'});
+                                                    for( $i = 0; $i < $total_ims; $i++ ) :
+
+                                                ?>
+
+                                                <h2>
+                                                    <?php esc_attr_e( ucfirst($gravapress_profile->{'entry'}[0]->{'urls'}[$i]->{'title'}), 'wp_admin_style' ); ?>
+                                                    <br />
+                                                    <small>
+                                                        
+                                                        <a href="<?php echo $gravapress_profile->{'entry'}[0]->{'urls'}[$i]->{'value'} ; ?>" target="_blank">
+	                                                            <?php esc_attr_e( $gravapress_profile->{'entry'}[0]->{'urls'}[$i]->{'value'} ); ?>
+	                                                    </a>
+
+                                                    </small>
+                                                </h2>
 
 												<hr />
 
-												<p>
-													Work Phone<br />
-													<small>551232118356</small>
-												</p>
+												<?php 
+                                                    endfor;
+                                                    endif; 
+                                                ?>  
 
-												<hr />
+                                                <!-- Telefones -->                                                                                                                                         
+
+                                                 <?php if( $gravapress_profile->{'entry'}[0]->{'phoneNumbers'}) :
+
+                                                    $total_ims = sizeof($gravapress_profile->{'entry'}[0]->{'phoneNumbers'});
+                                                    for( $i = 0; $i < $total_ims; $i++ ) :
+
+                                                ?>
+
+                                                <h2>
+                                                    <?php esc_attr_e( ucfirst($gravapress_profile->{'entry'}[0]->{'phoneNumbers'}[$i]->{'type'}) . ' Phone', 'wp_admin_style' ); ?>
+                                                    <br />
+                                                    <small>
+                                                        <?php esc_attr_e( $gravapress_profile->{'entry'}[0]->{'phoneNumbers'}[$i]->{'value'} ); ?>
+                                                    </small>
+                                                </h2>            
+
+                                                <hr />
+
+                                                <?php                                         
+                                                    endfor;
+                                                    endif; 
+                                                ?>  
 											
 											</div>
 										
@@ -218,7 +238,7 @@
 
 								</div>
 								<!-- /col-container -->
-<br class="clear">
+							<br class="clear">
 							</div> <!-- .wrap -->                          
                             
 						</div>
@@ -226,9 +246,31 @@
 
 					</div>
 					<!-- .postbox -->
-					
+					<!--Json Profile Postbox -->
+					<?php if( $display_json == true ) : ?>
+					<div class="postbox">
 
+						
+						<h2 class="hndle"><span><?php esc_attr_e( 'SAIDA JSON', 'wp_admin_style' ); ?></span>
+						</h2>
+
+						<div class="inside">
+
+							<pre>
+								<code>
+									<?php var_dump( $gravapress_profile ); ?>
+								</code>
+							</pre>
+							
+						</div>
+					</div>
 					<?php endif; ?>
+					<!-- Json postbox -->
+					
+					<?php endif; ?>
+
+
+					
 				</div>
 				<!-- .meta-box-sortables .ui-sortable -->
 
