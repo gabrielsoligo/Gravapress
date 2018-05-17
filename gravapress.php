@@ -12,7 +12,7 @@
     /*
     *	Variaveis Globais
     */
-    $plugin_url = WP_PLUGIN_URL . '/gravapress';
+    $plugin_url = WP_PLUGIN_URL . '/wp-gravapress';
     $options = array();
     $display_json = false;
 
