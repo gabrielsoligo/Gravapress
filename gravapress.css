@@ -41,8 +41,30 @@
 }
 
 .sites-image a{
-    margin:0px 20px;
+    margin: 0px 20px;
     display:inline-block;
     text-decoration:none;
     color:black;
  }
+ /*
+ *	Frontend Widget Styles
+ *
+*/
+.about-me {
+	width: 100%; 
+	overflow: hidden;
+}
+
+.about-me img{
+	float: left;
+	margin-bottom: 10px;	
+}
+
+.about-me span{
+	margin-right: 30px; 
+	float:right;
+}
+
+#about-title{		
+	margin-bottom: 0px; 
+}

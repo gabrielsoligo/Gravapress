@@ -247,7 +247,7 @@
 					</div>
 					<!-- .postbox -->
 					<!--Json Profile Postbox -->
-					<?php if( $display_json == true ) : ?>
+					<?php if( $display_json == false ) : ?>
 					<div class="postbox">
 
 						

@@ -1,6 +1,6 @@
 <?php
     /*  
-    *   Plugin Name: Gravapress
+    *   Plugin Name: WP-Gravapress
     *   Plugin URI: http://gabrielsoligo.com/gravapress
     *   Description: Opções para personlizar sua foto de perfil dentro do painel Wordpress com Gravatar
     *   Version: 0.2
@@ -111,16 +111,6 @@
 
     }
 
-    /*
-    *   chamando css
-    */
-    function gravapress_styles(){
-
-    	wp_enqueue_style( 'gravapress_styles', plugins_url( 'gravapress/gravapress.css' ) );
-
-    }
-    add_action( 'admin_head', 'gravapress_styles' );
-
 
         class Gravapress_Widget extends WP_Widget {
         // Classe de widgets no wordpress
@@ -135,10 +125,16 @@
         }
 
         function widget( $args, $instance ) {
+            global $plugin_url;
+
             // Mostrar conteúdo no frontend do site
             extract($args); // extrair argumentos que são fornecidos ao widget
             $title = apply_filters( 'widget_title', $instance['title'] ); // título que aparecerá no topo do widget no frontend
             // a pessoa poderá personalizar o título
+
+            //
+            $display_social = $instance['display_social'];
+            $display_contact = $instance['display_contact'];
 
             // perfil armazenado do usuário que será exibido no frontend
             $options = get_option( 'gravapress' );
@@ -153,6 +149,8 @@
             // Substitui as antigas opções por novas opções salvas pelo usuário para o widget
             $instance = $old_instance;
             $instance['title'] = strip_tags($new_instance['title']);
+            $instance['display_social'] = strip_tags($new_instance['display_social']);
+            $instance['display_contact'] = strip_tags($new_instance['display_contact']);
 
             return $instance;
         }
@@ -162,6 +160,12 @@
             // Aparência do Widget na área administrativa do WP
             // Inicialmente a única coisa a ser feita é exibir um campo para alteração do título do widget
             $title = esc_attr( $instance['title'] ); // obter o título definido armazenado
+            $display_social = esc_attr( $instance['display_social'] );
+            $display_contact = esc_attr( $instance['display_contact'] );
+
+            //usando perfil de usuario dentro do widget-filds.php
+            $options = get_option( 'gravapress' );
+            $gravapress_profile = $options['gravapress_profile'];
 
             require( 'includes/widget-fields.php' );
         }
@@ -171,7 +175,113 @@
         // função que registra o widget no wordpress
         register_widget( 'Gravapress_Widget' );
     }
-
     add_action( 'widgets_init', 'myplugin_register_widgets' );  
 
+    /*
+    * Shortcode
+    */
+    function gravapress_shortcodes( $atts, $content = null){
+
+        global $post;
+        global $plugin_url;
+
+        $a = shortcode_atts( array( 
+           'gallery' => 'off',
+           'sites' => 'off',
+           'social' => 'off',
+           'contact' => 'off',
+         ), $atts );
+
+        if ($a['gallery'] == 'on') $gallery = 1;
+        if ($a['gallery'] == 'off') $gallery = 0;
+
+        if ($a['sites'] == 'on') $sites = 1;
+        if ($a['sites'] == 'off') $sites = 0;
+
+        if ($a['social'] == 'on') $social = 1;
+        if ($a['social'] == 'off') $social = 0;
+
+        if ($a['contact'] == 'on') $contact = 1;
+        if ($a['contact'] == 'off') $contact = 0;
+
+        $display_gallery = $gallery;
+        $display_sites = $sites;
+        $display_social = $social;
+        $display_contact = $contact;
+
+        $options = get_option( 'gravapress' );
+        $gravapress_profile = $options['gravapress_profile'];
+
+        ob_start();
+
+        require('includes/front-end-shortcode.php');
+
+        $content = ob_get_clean();
+
+        return $content;
+
+    }
+    add_shortcode( 'gravapress', 'gravapress_shortcodes' );
+
+   /*
+    *   atualização do perfil
+    */
+    function gravapress_update_profile(){
+
+        $options = get_option( 'gravapress');
+        $last_updated = $options['last_updated'];
+
+        $time = time();
+
+        $last_updated = $time - $last_updated;
+
+        $gravapress_email_hash = $options['gravapress_email_hash'];
+
+        $options['gravapress_profile'] = gravatar_get_profile($gravapress_email_hash );
+        $options['last_updated'] = time();
+
+        update_option( 'gravapress', $options );
+
+        die();
+
+    }
+    add_action( 'wp_ajax_gravapress_update_profile', 'gravapress_update_profile' );
+    /*
+    *   habilitando AJAX
+    *   misturando javascript com o php CUIDADO
+    */
+    function gravapress_ajax_frontend(){ ?>
+        
+        <script type="text/javascript">
+            var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
+        </script>
+        
+   <?php }
+    add_action( 'wp_head', 'gravapress_ajax_frontend' );
+
+   /*
+    *   Enqueue Styles
+    */
+    function gravapress_backend_styles(){
+
+        wp_enqueue_style( 'gravapress_backend_css', plugins_url( 'gravapress/gravapress.css' ) );
+
+    }
+    add_action( 'admin_head', 'gravapress_backend_styles' );
+
+    function gravapress_frontend_styles(){
+
+        wp_enqueue_style( 'gravapress_frontend_css', plugins_url( 'gravapress/gravapress.css' ) );
+
+    }
+    add_action( 'wp_enqueue_scripts', 'gravapress_frontend_styles' );
+    /*
+    *   Enqueue Scripts
+    */
+    function gravapress_frontend_scripts(){
+
+        wp_enqueue_script( 'plugin_gravapress_frontend_js', plugins_url( 'gravapress/gravapress.js' ), array( 'jquery' ), '', true);
+
+    }
+    add_action( 'wp_enqueue_scripts', 'gravapress_frontend_scripts' );
 ?>
